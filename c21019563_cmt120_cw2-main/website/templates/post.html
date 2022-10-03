@@ -1,0 +1,173 @@
+{% extends "posts_div.html" %} {% block title %}{{ title }}{% endblock
+    %} {% block header %} <h1 align='center' class="post_title">{{ title }}</h1>{% endblock %} 
+
+{% block page %} 
+
+<div class="card border-dark">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <a href="/posts/{{ post.user.username }}">Author: {{ post.user.username }}</a>
+    <div>
+      <span id="likes-count-{{post.id}}">
+      {{ post.likes|length }}</span> 
+      {% if user.id in post.likes|map(attribute="author")|list %}
+      <i
+        class="fas fa-thumbs-up"
+        id="like-button-{{post.id}}"
+        onclick="like({{post.id}})"
+      ></i>
+      {% else %}
+      <i
+        class="far fa-thumbs-up"
+        id="like-button-{{post.id}}"
+        onclick="like({{post.id}})"
+      ></i>
+      {% endif %} 
+    {% if user.id == post.author %}
+    <div class="btn-group">
+      <button
+        type="button"
+        class="btn btn-sm btn-primary dropdown-toggle"
+        data-bs-toggle="dropdown"
+      ></button>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="/delete-post/{{post.id}}" class="dropdown-item"
+            >Delete</a
+          >
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<div class="card-body">
+<div class="card-text">
+  <div class="row">
+      <img src="/static/images/{{post.image_file}}" class="img-thumbnail m-auto" alt="" style="width: 250px;height:250px; margin-bottom: 30px !important;"> 
+      
+    <div class="offset-md-1 col-md-10 detailed_description">
+      {{ post.text }}
+    </div>
+  </div>
+  
+
+</div></div>
+<div class="card-footer text-muted">{{ post.date_created }}</div>
+</div>
+<br/>
+<div class="card border-dark">
+  <div class="card-header" d-flex justify-content-between align-items-center>
+    <a>Comments</a>
+  </div>
+    {% if post.comments|length > 0 %}
+    <div class="card-body">
+      <div class="uncollapse" id="comments-{{ post.id }}">
+        <div class="card">
+          <div class="card-body" id="comments-expanded-{{ post.id }}">
+            {% for comment in post.comments %}
+            <div class="d-flex justify-content-between align-items-center">
+             <div class="comment_text">
+              <a href="/posts/{{ comment.user.username }}">{{ comment.user.username }}</a>: {{ comment.text }}
+            </div>
+              <div>
+                  {% for star in range(comment.star) %}
+                  <span class="star sel">☆</span>
+                  {% endfor %}
+                <small class="text-muted">{{ comment.date_created }}</small>
+                {% if user.id == comment.author or user.id == post.author %}
+                <div class="btn-group">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="/delete-comment-post/{{comment.id}}" class="dropdown-item"
+                        >Delete</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <form class="row row-cols-lg-auto g-3 align-items-center" method="POST" action="/create-comment-post/{{post.id}}">
+        <div class="col-9">
+          <div class="input-group">
+            <div class="input-group-text">Content</div>
+            <input type="text" class="form-control" id="inlineFormInputGroupUsername" name="text" placeholder="Comment something!"/>
+            <input type="hidden" class="form-control" id="star" name="star" />
+          </div>
+        </div>
+      
+        <div class="col-2">
+          <div class="input-group post_rating">
+            <div class="input-group-text">Star</div>
+            <span class="star" title="1">☆</span>
+            <span class="star" title="2">☆</span>
+            <span class="star" title="3">☆</span>
+            <span class="star" title="4">☆</span>
+            <span class="star" title="5">☆</span>
+        </div>
+        </div>
+      
+        <div class="col-1">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+
+      {% else %}
+      <div>
+        <br/>
+      <p class="text-muted" align='center'>No Comments</p>
+      <!-- <form class="input-group mb-3" method="POST" action="/create-comment-post/{{post.id}}">
+        <input type="text" id="text" name="text" class="form-control" placeholder="Say something!"/>
+        <button type="submit" class="btn btn-primary">Comment</button>
+      </form> -->
+      <form class="row row-cols-lg-auto g-3 align-items-center" method="POST" action="/create-comment-post/{{post.id}}">
+        <div class="col-9">
+          <div class="input-group">
+            <div class="input-group-text">Content</div>
+            <input type="text" class="form-control" id="inlineFormInputGroupUsername" name="text"
+              placeholder="Comment something!" />
+            <input type="hidden" class="form-control" id="star2" name="star" />
+          </div>
+        </div>
+      
+        <div class="col-2 post_rating">
+          <div class="input-group">
+            <div class="input-group-text">Star</div>
+            <span class="star2" title="1">☆</span>
+            <span class="star2" title="2">☆</span>
+            <span class="star2" title="3">☆</span>
+            <span class="star2" title="4">☆</span>
+            <span class="star2" title="5">☆</span>
+          </div>
+        </div>
+      
+        <div class="col-1">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+      {% endif %}
+    </div>
+    
+</div>
+<br/>
+{% endblock page %}
+
+{% block footer %}
+    <div align="center">
+      <a href="/home"
+        ><button type="button" class="btn btn-primary btn-lg">Back</button></a
+      >
+    </div>
+{% endblock %}
+    

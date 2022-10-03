@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block title %}Greeting{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<h1 align='center'>Hello, {{ user.username }}</h1>
+{% else %}
+<h2 align='center'>Hello, Guest</h2>
+
+{% endif %}
+{% endblock %}

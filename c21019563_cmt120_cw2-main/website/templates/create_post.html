@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1 align="center">Make a Post</h1>
+
+<form method="POST", enctype='multipart/form-data'>
+  <label for="title">Title</label>
+  <input type="text" name="title" placeholder="title" class="form-control"></input>
+  <br />
+  <label for="description">Description</label>
+  <textarea name="description" id="description" placeholder="A summary about your post" class="form-control"></textarea>
+  <br />
+  <label for="text">Content</label>
+  <textarea name="text" id="text" placeholder="Share your feelings" class="form-control"></textarea>
+  <br />
+  <label for="image">Upload image</label>
+  <input type="file" name="image" style="margin-top:20px;"/>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-lg btn-primary">Post</button>
+  </div>
+</form>
+  <br/>
+<div align="center">
+  <a href="/home"
+    ><button type="button" class="btn btn-lg btn-secondary">Back</button></a
+  >
+</div>
+{% endblock %}

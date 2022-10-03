@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/999ca2bb93.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+      html, body {
+        height: 100%;
+        min-height: 100%;
+      }
+      .container {
+        min-height: 86%;
+      }
+      .sel {
+        color: red;
+      }
+      .star {
+        font-size: 20px;
+      }
+      .footer{
+          color: #fff;
+          background-color: #000;
+          /* line-height: 20px!important; */
+          padding-bottom: 10px;
+          clear: both;
+          width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="top_navig_bar">
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/home">Home</a>
+            <a class="nav-item nav-link" href="/pers-greet">Pers_Greet</a>
+            {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="/logout">Logout</a>
+            {% else %}
+            <a class="nav-item nav-link" href="/login">Login</a>
+            <a class="nav-item nav-link" href="/register">Register</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div class="alert alert-danger alter-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <div class="container">{% block content %}{% endblock %}</div>
+    <div class="footer" id="footer"><footer align='center'>{% block foote %} Blog designed by Xinchu Sun <br/> Copyrights 2021-2022. &nbsp All rights reserved by Xinchu Sun <br/> Tel: +44 07749829274  &nbsp Email: SunX42@cardiff.ac.uk  {% endblock %}</footer></div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='index.js')}}"
+    ></script>
+    <script>
+      $(document).ready(function(){
+        $('#star').val();
+        $('#star2').val();
+        $('#star3').val();
+
+        $("span.star").bind("click",function(){ 
+          $(this).parent("div").find("span.star").removeClass("sel");
+          $(this).addClass("sel");
+          // console.log($(this).prevAll("span.star").length);
+          var star_count = $(this).prevAll("span.star").length;
+          $('#star').val(star_count+1);
+          $(this).prevAll("span.star").addClass("sel");
+          }); 
+          
+        $("span.star2").bind("click", function () {
+          $(this).parent("div").find("span.star2").removeClass("sel");
+          $(this).addClass("sel");
+          // console.log($(this).prevAll("span.star").length);
+          var star_count = $(this).prevAll("span.star2").length;
+          $('#star2').val(star_count + 1);
+          $(this).prevAll("span.star2").addClass("sel");
+        }); 
+
+        $("span.star3").bind("click", function () {
+          $(this).parent("div").find("span.star3").removeClass("sel");
+          $(this).addClass("sel");
+          // console.log($(this).prevAll("span.star3").length);
+          var star_count = $(this).prevAll("span.star3").length;
+          // console.log($(this).parent("div").parent("div").parent("form").find('#star3').val())
+          $(this).parent("div").parent("div").parent("form").find('#star3').val(star_count + 1);
+          $(this).prevAll("span.star3").addClass("sel");
+        }); 
+        });
+    </script>
+  </body>
+</html>
